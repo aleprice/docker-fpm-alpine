@@ -28,3 +28,5 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
 	&& echo 'newrelic.enabled = true' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
 	&& apk del .fetch-deps
+	
+WORKDIR /var/www/html
