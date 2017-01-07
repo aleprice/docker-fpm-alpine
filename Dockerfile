@@ -1,13 +1,24 @@
 FROM php:fpm-alpine
 
 RUN set -xe \
-  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml \
+  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev git libressl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+  && git clone https://github.com/php-memcached-dev/php-memcached \
+  && cd php-memcached \
+  && git checkout php7 \
+  && cd .. \
+  && mv php-memcached /usr/src/php/ext/memcached \
+  && wget https://pecl.php.net/get/redis-3.1.0.tgz \
+  && tar -xf redis-3.1.0.tgz \
+  && mv redis-3.1.0 /usr/src/php/ext/redis \
+  && wget https://pecl.php.net/get/amqp-1.7.1.tgz \
+  && tar -xf amqp-1.7.1.tgz \
+  && mv amqp-1.7.1 /usr/src/php/ext/amqp \
+  && wget https://pecl.php.net/get/igbinary-2.0.1.tgz \
+  && tar -xf igbinary-2.0.1.tgz \
+  && mv igbinary-2.0.1 /usr/src/php/ext/igbinary \
+  && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-  && docker-php-ext-install gd
-RUN apk add --no-cache --virtual .fetch-testing-deps libressl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
-  && printf "\n" | pecl install memcached amqp igbinary redis \
-  && docker-php-ext-enable memcached amqp igbinary redis
+  && docker-php-ext-install gd pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml memcached amqp igbinary redis
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
 	&& python get-pip.py --no-setuptools --no-wheel \
