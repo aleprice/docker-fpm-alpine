@@ -4,8 +4,8 @@ RUN set -xe \
   && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
   && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-  && docker-php-ext-install gd \
-  && apk add --no-cache --virtual rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+  && docker-php-ext-install gd
+RUN apk add --no-cache --virtual .fetch-testing-deps libressl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && printf "\n" | pecl install memcached amqp igbinary redis \
   && docker-php-ext-enable memcached amqp igbinary redis
 
@@ -34,6 +34,6 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
 	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
-	&& apk del .fetch-deps
+	&& apk del .fetch-deps .fetch-testing-deps
 	
 WORKDIR /var/www/html
