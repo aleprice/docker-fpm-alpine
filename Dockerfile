@@ -1,8 +1,16 @@
 FROM php:fpm-alpine
 
+RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories \
+  && echo '@testing http://nl.alpinelinux.org/alpine/testing/main' >> /etc/apk/repositories
+
 RUN set -xe \
-  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash \
-  && docker-php-ext-install pdo_mysql opcache zip
+  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev rabbitmq-c-dev@testing \
+  && docker-php-ext-install pdo_mysql opcache zip pcntl bz2 mcrypt iconv soap \
+  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-install gd
+  
+RUN printf "\n" | pecl install memcached amqp igbinary redis \
+  && docker-php-ext-enable memcached amqp igbinary redis
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
 	&& python get-pip.py --no-setuptools --no-wheel \
