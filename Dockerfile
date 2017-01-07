@@ -1,12 +1,11 @@
 FROM php:fpm-alpine
 
 RUN set -xe \
-  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-libs libbz2 \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl bz2 mcrypt iconv soap intl \
+  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-libs \
+  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-  && docker-php-ext-install gd
-  
-RUN apk add --no-cache --virtual rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+  && docker-php-ext-install gd \
+  && apk add --no-cache --virtual rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && printf "\n" | pecl install memcached amqp igbinary redis \
   && docker-php-ext-enable memcached amqp igbinary redis
 
