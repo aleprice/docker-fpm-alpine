@@ -4,7 +4,7 @@ RUN set -xe \
   && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev libressl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && wget --no-check-certificate https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz \
   && tar -xf php7.tar.gz \
-  && mkdir -p /usr/src/php/ext
+  && mkdir -p /usr/src/php/ext \
   && mv php-memcached-php7 /usr/src/php/ext/memcached \
   && wget https://pecl.php.net/get/redis-3.1.0.tgz \
   && tar -xf redis-3.1.0.tgz \
