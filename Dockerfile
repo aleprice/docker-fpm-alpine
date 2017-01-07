@@ -1,15 +1,13 @@
 FROM php:fpm-alpine
 
-RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories \
-  && echo '@testing http://nl.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories
-
 RUN set -xe \
-  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev rabbitmq-c-dev@testing \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl bz2 mcrypt iconv soap \
+  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-libs \
+  && docker-php-ext-install pdo_mysql opcache zip pcntl bz2 mcrypt iconv soap intl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd
   
-RUN printf "\n" | pecl install memcached amqp igbinary redis \
+RUN apk add --no-cache --virtual rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+  && printf "\n" | pecl install memcached amqp igbinary redis \
   && docker-php-ext-enable memcached amqp igbinary redis
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
