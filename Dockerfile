@@ -15,7 +15,7 @@ RUN set -xe \
   && wget https://pecl.php.net/get/igbinary-2.0.1.tgz \
   && tar -xf igbinary-2.0.1.tgz \
   && mv igbinary-2.0.1 /usr/src/php/ext/igbinary \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis
+  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis \
   && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd memcached
