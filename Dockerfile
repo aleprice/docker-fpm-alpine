@@ -45,6 +45,7 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
 	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
-	&& apk del .fetch-deps .fetch-testing-deps
+  && rm -fr /usr/src/php/ext \
+	&& apk del .fetch-deps
 	
 WORKDIR /var/www/html
