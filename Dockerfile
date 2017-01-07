@@ -1,8 +1,8 @@
 FROM php:fpm-alpine
 
 RUN set -xe \
-  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-libs \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl \
+  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-libs libxml2-dev \
+  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd \
   && apk add --no-cache --virtual rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
