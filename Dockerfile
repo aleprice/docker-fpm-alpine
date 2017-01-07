@@ -1,21 +1,24 @@
 FROM php:fpm-alpine
 
 RUN set -xe \
-  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+  && apk add --no-cache --virtual .fetch-deps zlib-dev py-setuptools wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
+  && apk add --no-cache --virtual .edge-deps libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && wget --no-check-certificate https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz \
   && tar -xf php7.tar.gz \
   && mkdir -p /usr/src/php/ext \
   && mv php-memcached-php7 /usr/src/php/ext/memcached \
-  && wget https://pecl.php.net/get/redis-3.1.0.tgz \
-  && tar -xf redis-3.1.0.tgz \
-  && mv redis-3.1.0 /usr/src/php/ext/redis \
-  && wget https://pecl.php.net/get/amqp-1.7.1.tgz \
-  && tar -xf amqp-1.7.1.tgz \
-  && mv amqp-1.7.1 /usr/src/php/ext/amqp \
-  && wget https://pecl.php.net/get/igbinary-2.0.1.tgz \
-  && tar -xf igbinary-2.0.1.tgz \
-  && mv igbinary-2.0.1 /usr/src/php/ext/igbinary \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis \
+  && wget https://pecl.php.net/get/redis \
+  && tar -xf redis \
+  && mv redis-* /usr/src/php/ext/redis \
+  && wget https://pecl.php.net/get/amqp \
+  && tar -xf amqp \
+  && mv amqp-* /usr/src/php/ext/amqp \
+  && wget https://pecl.php.net/get/igbinary \
+  && tar -xf igbinary \
+  && mv igbinary-* /usr/src/php/ext/igbinary \
+  && git clone --recursive --depth=1 https://github.com/kjdev/php-ext-snappy.git \
+  && mv php-ext-snappy /usr/src/php/ext/snappy \
+  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy \
   && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd memcached
@@ -45,6 +48,6 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
 	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
-	&& apk del .fetch-deps
+	&& apk del .fetch-deps .edge-deps
 	
 WORKDIR /var/www/html
