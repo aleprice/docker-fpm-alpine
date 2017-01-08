@@ -1,7 +1,7 @@
 FROM php:fpm-alpine
 
 RUN set -xe \
-  && apk add --no-cache py-setuptools zlib-dev wget bash libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
+  && apk add --no-cache py-setuptools git wget bash py-setuptools zlib-dev libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
   && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && wget --no-check-certificate https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz \
   && tar -xf php7.tar.gz \
