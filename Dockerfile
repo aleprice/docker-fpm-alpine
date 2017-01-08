@@ -5,16 +5,20 @@ RUN set -xe \
   && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && wget --no-check-certificate https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz \
   && tar -xf php7.tar.gz \
+  && rm php7.tar.gz \
   && mkdir -p /usr/src/php/ext \
   && mv php-memcached-php7 /usr/src/php/ext/memcached \
   && wget https://pecl.php.net/get/redis \
   && tar -xf redis \
+  && rm redis \
   && mv redis-* /usr/src/php/ext/redis \
   && wget https://pecl.php.net/get/amqp \
   && tar -xf amqp \
+  && rm amqp \
   && mv amqp-* /usr/src/php/ext/amqp \
   && wget https://pecl.php.net/get/igbinary \
   && tar -xf igbinary \
+  && rm igbinary \
   && mv igbinary-* /usr/src/php/ext/igbinary \
   && git clone --recursive --depth=1 https://github.com/kjdev/php-ext-snappy.git \
   && mv php-ext-snappy /usr/src/php/ext/snappy \
@@ -48,6 +52,7 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
 	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
+  && rm -fr /usr/src/php/ext \
 	&& apk del git py-setuptools wget bash 
 	
 WORKDIR /var/www/html
