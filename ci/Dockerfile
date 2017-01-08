@@ -4,7 +4,7 @@ RUN set -xe \
   && apk add --no-cache wget \
   && wget https://pecl.php.net/get/xdebug \
   && tar -xf xdebug \
-  && mkdir -p /usr/src/php/ext
+  && mkdir -p /usr/src/php/ext \
   && mv xdebug-* /usr/src/php/ext/xdebug \
   && docker-php-ext-install xdebug \
   && apk del wget \
