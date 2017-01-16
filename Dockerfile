@@ -1,7 +1,5 @@
 FROM php:fpm-alpine
 
-ENV PHP_INI_SCAN_DIR :/usr/local/etc/php/extra.d
-
 RUN set -xe \
   && apk add --no-cache py-setuptools git wget bash py-setuptools zlib-dev libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
   && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
@@ -51,6 +49,8 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
         && echo 'extension = "newrelic.so"' > /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo '[newrelic]' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.enabled = true' >> /usr/local/etc/php/conf.d/newrelic.ini \
+	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
+ 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
   && rm -fr /usr/src/php/ext \
 	&& apk del git py-setuptools wget bash 
