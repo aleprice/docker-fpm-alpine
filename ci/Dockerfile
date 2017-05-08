@@ -1,7 +1,7 @@
 FROM arielkung/fpm-alpine
 
 RUN set -xe \
-  && apk add --no-cache wget \
+  && apk add --no-cache wget git \
   && wget https://pecl.php.net/get/xdebug \
   && tar -xf xdebug \
   && mkdir -p /usr/src/php/ext \
