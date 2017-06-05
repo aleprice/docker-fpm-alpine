@@ -60,6 +60,7 @@ RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extension
   && rm -fr /usr/src/php/ext \
 	&& apk del git py-setuptools wget bash 
 
-RUN echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/settings.ini
+RUN echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/settings.ini \
+  && sed -i "s/access.log =.*/access.log = \/proc\/self\/fd\/1/" /usr/local/etc/php-fpm.d/docker.conf
 
 WORKDIR /var/www/html
