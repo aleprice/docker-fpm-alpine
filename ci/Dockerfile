@@ -9,5 +9,6 @@ RUN set -xe \
   && docker-php-ext-install xdebug \
   && wget https://getcomposer.org/composer.phar \
   && mv composer.phar /usr/local/bin/composer \
+  && chmod +x /usr/local/bin/composer \
   && apk del wget \
   && rm -fr /usr/src/php/ext
