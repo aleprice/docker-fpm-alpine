@@ -6,8 +6,8 @@ RUN set -xe \
   && mkdir -p /usr/src/php/ext \
   && wget https://pecl.php.net/get/memcached \
   && tar -xf memcached \
-  && rm memcached \
-  && mv memcached-* /usr/src/php/ext/memcached \
+  # && rm memcached \
+  # && mv memcached-* /usr/src/php/ext/memcached \
   && wget https://pecl.php.net/get/redis \
   && tar -xf redis \
   && rm redis \
@@ -27,9 +27,9 @@ RUN set -xe \
   && git clone --recursive --depth=1 https://github.com/kjdev/php-ext-snappy.git \
   && mv php-ext-snappy /usr/src/php/ext/snappy \
   && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy \
-  && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
-  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-  && docker-php-ext-install gd memcached
+  # && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
+  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+  # && docker-php-ext-install gd memcached
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
 	&& python get-pip.py --no-setuptools --no-wheel \
@@ -48,6 +48,17 @@ WORKDIR /
 RUN pip install newrelic-plugin-agent \
 	&& mkdir -p /var/log/newrelic \
 	&& mkdir -p /var/run/newrelic
+
+RUN cp /opt/newrelic/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/newrelic.so \
+        && echo 'extension = "newrelic.so"' > /usr/local/etc/php/conf.d/newrelic.ini \
+	&& echo '[newrelic]' >> /usr/local/etc/php/conf.d/newrelic.ini \
+	&& echo 'newrelic.enabled = true' >> /usr/local/etc/php/conf.d/newrelic.ini \
+	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
+ 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
+	&& echo 'newrelic.feature_flag=laravel_queue' >> /usr/local/etc/php/conf.d/newrelic.ini \
+	&& rm -fr /opt/newrelic \
+  && rm -fr /usr/src/php/ext \
+	&& apk del git py-setuptools wget bash 
 
 RUN echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/settings.ini \
   && sed -i "s/access.log =.*/access.log = \/proc\/self\/fd\/1/" /usr/local/etc/php-fpm.d/docker.conf
