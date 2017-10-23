@@ -31,24 +31,6 @@ RUN set -xe \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
   # && docker-php-ext-install gd memcached
 
-RUN wget https://bootstrap.pypa.io/get-pip.py \
-	&& python get-pip.py --no-setuptools --no-wheel \
-	&& rm get-pip.py
-
-RUN mkdir -p /opt/newrelic
-WORKDIR /opt/newrelic
-RUN wget -r -nd --no-parent -Alinux-musl.tar.gz \
-	http://download.newrelic.com/php_agent/release/ >/dev/null 2>&1 \
-	&& tar -xzf newrelic-php*.tar.gz --strip=1 \
-	&& rm newrelic-php*.tar.gz
-ENV NR_INSTALL_SILENT true
-ENV NR_INSTALL_PHPLIST /usr/local/bin/
-RUN bash newrelic-install install
-WORKDIR /
-RUN pip install newrelic-plugin-agent \
-	&& mkdir -p /var/log/newrelic \
-	&& mkdir -p /var/run/newrelic
-
 RUN rm -fr /usr/src/php/ext \
 	&& apk del git py-setuptools wget bash 
 
