@@ -26,7 +26,7 @@ RUN set -xe \
   && mv apcu-* /usr/src/php/ext/apcu \
   && git clone --recursive --depth=1 https://github.com/kjdev/php-ext-snappy.git \
   && mv php-ext-snappy /usr/src/php/ext/snappy \
-  && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy \
+  && docker-php-ext-install mysql pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy \
   # && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
   # && docker-php-ext-install gd memcached
