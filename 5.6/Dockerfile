@@ -5,7 +5,7 @@ RUN set -xe \
   && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && mkdir -p /usr/src/php/ext \
   && wget https://pecl.php.net/get/memcached-2.2.0 \
-  && tar -xf memcached \
+  && tar -xf memcached-2.2.0 \
   && rm memcached-2.2.0 \
   && mv memcached-2.2.0 /usr/src/php/ext/memcached \
   && wget https://pecl.php.net/get/redis \
