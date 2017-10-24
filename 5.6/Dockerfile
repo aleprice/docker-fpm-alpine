@@ -40,23 +40,26 @@ RUN wget -r -nd --no-parent -Alinux-musl.tar.gz \
 	http://download.newrelic.com/php_agent/release/ >/dev/null 2>&1 \
 	&& tar -xzf newrelic-php*.tar.gz --strip=1 \
 	&& rm newrelic-php*.tar.gz
+
 ENV NR_INSTALL_SILENT true
 ENV NR_INSTALL_PHPLIST /usr/local/bin/
+ENV NR_INSTALL_ARCH x64
+ENV NR_INSTALL_USE_CP_NOT_LN true
+
 RUN bash newrelic-install install
 WORKDIR /
 RUN pip install newrelic-plugin-agent \
 	&& mkdir -p /var/log/newrelic \
 	&& mkdir -p /var/run/newrelic
 
-RUN cp /opt/newrelic/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/newrelic.so \
-        && echo 'extension = "newrelic.so"' > /usr/local/etc/php/conf.d/newrelic.ini \
+RUN echo 'extension = "newrelic.so"' > /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo '[newrelic]' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.enabled = true' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.license = ${NEWRELIC_LICENSE}' >> /usr/local/etc/php/conf.d/newrelic.ini \
- 	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
+	&& echo 'newrelic.appname = ${NEWRELIC_APPNAME}' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.feature_flag=laravel_queue' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& rm -fr /opt/newrelic \
-  	&& rm -fr /usr/src/php/ext \
+	&& rm -fr /usr/src/php/ext \
 	&& apk del git py-setuptools wget bash
 
 RUN echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/settings.ini \
