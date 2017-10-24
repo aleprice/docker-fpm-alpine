@@ -4,10 +4,6 @@ RUN set -xe \
   && apk add --no-cache py-setuptools git wget bash py-setuptools zlib-dev libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
   && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && mkdir -p /usr/src/php/ext \
-  && wget https://pecl.php.net/get/memcached-2.2.0 \
-  && tar -xvzf memcached-2.2.0 \
-  && rm memcached-2.2.0 \
-  && mv memcached-2.2.0 /usr/src/php/ext/memcached \
   && wget https://pecl.php.net/get/redis \
   && tar -xf redis \
   && rm redis \
@@ -27,9 +23,8 @@ RUN set -xe \
   && git clone --recursive --depth=1 https://github.com/kjdev/php-ext-snappy.git \
   && mv php-ext-snappy /usr/src/php/ext/snappy \
   && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy \
-  && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-  && docker-php-ext-install gd memcached \
+  && docker-php-ext-install gd \
   && echo 'apc.shm_size = 256M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini \
   && echo 'apc.serializer = igbinary' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
 
