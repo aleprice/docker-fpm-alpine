@@ -6,8 +6,8 @@ RUN set -xe \
   && mkdir -p /usr/src/php/ext \
   && wget https://pecl.php.net/get/memcached-2.2.0 \
   && tar -xf memcached \
-  && rm memcached \
-  && mv memcached-* /usr/src/php/ext/memcached \
+  && rm memcached-2.2.0 \
+  && mv memcached-2.2.0 /usr/src/php/ext/memcached \
   && wget https://pecl.php.net/get/redis \
   && tar -xf redis \
   && rm redis \
