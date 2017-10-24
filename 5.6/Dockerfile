@@ -28,7 +28,7 @@ RUN set -xe \
   && mv php-ext-snappy /usr/src/php/ext/snappy \
   && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy \
   && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
-  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd memcached \
   && echo 'apc.shm_size = 256M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini \
   && echo 'apc.serializer = igbinary' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
