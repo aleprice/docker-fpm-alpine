@@ -30,7 +30,7 @@ RUN set -xe \
   && docker-php-ext-configure memcached --enable-memcached-igbinary --disable-memcached-sasl \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd memcached \ 
-  && echo 'extension = "apc.so"' > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini \
+  && echo 'extension = "apcu.so"' > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini \
   && echo 'apc.shm_size = 256M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
