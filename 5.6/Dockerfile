@@ -66,6 +66,7 @@ RUN echo 'extension = "newrelic.so"' > /usr/local/etc/php/conf.d/newrelic.ini \
 	&& apk del git py-setuptools wget bash
 
 RUN echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/settings.ini \
+  && echo 'date.timezone = ${TIMEZONE}' >> /usr/local/etc/php/conf.d/settings.ini \
   && sed -i "s/access.log =.*/access.log = \/proc\/self\/fd\/1/" /usr/local/etc/php-fpm.d/docker.conf
 
 WORKDIR /var/www/html
