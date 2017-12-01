@@ -24,6 +24,10 @@ RUN set -xe \
   && tar -xf apcu \
   && rm apcu \
   && mv apcu-* /usr/src/php/ext/apcu \
+  && wget https://pecl.php.net/get/mcrypt \
+  && tar -xf mcrypt \
+  && rm mcrypt \
+  && mv mcrypt-* /usr/src/php/ext/mcrypt \
   && git clone --recursive --depth=1 https://github.com/kjdev/php-ext-snappy.git \
   && mv php-ext-snappy /usr/src/php/ext/snappy \
   && docker-php-ext-install pdo_mysql opcache zip pcntl mcrypt iconv soap intl xml amqp igbinary redis snappy apcu \
