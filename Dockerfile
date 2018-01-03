@@ -2,7 +2,7 @@ FROM php:fpm-alpine
 
 RUN set -xe \
   && apk add --no-cache py-setuptools git wget bash py-setuptools zlib-dev libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
-  && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-3.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+  && apk add --no-cache libressl-dev cyrus-sasl-dev --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ rabbitmq-c-dev gnu-libiconv --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
   && mkdir -p /usr/src/php/ext \
   && wget https://pecl.php.net/get/memcached \
   && tar -xf memcached \
@@ -36,6 +36,8 @@ RUN set -xe \
   && docker-php-ext-install gd memcached \ 
   && echo 'extension = "apcu.so"' > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini \
   && echo 'apc.shm_size = 256M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
+
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
 	&& python get-pip.py --no-setuptools --no-wheel \
