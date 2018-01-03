@@ -1,4 +1,4 @@
-FROM php:fpm-alpine
+FROM php:7.1-fpm-alpine
 
 RUN set -xe \
   && apk add --no-cache py-setuptools git wget bash py-setuptools zlib-dev libpng-dev freetype-dev libjpeg-turbo-dev libmcrypt-dev libmemcached-dev icu-dev libxml2-dev \
@@ -57,7 +57,7 @@ RUN pip install newrelic-plugin-agent \
 	&& mkdir -p /var/log/newrelic \
 	&& mkdir -p /var/run/newrelic
 
-RUN cp /opt/newrelic/agent/x64/newrelic-20170718.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718/newrelic.so \
+RUN cp /opt/newrelic/agent/x64/newrelic-20160303.so /usr/local/lib/php/extensions/no-debug-non-zts-20160303/newrelic.so \
         && echo 'extension = "newrelic.so"' > /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo '[newrelic]' >> /usr/local/etc/php/conf.d/newrelic.ini \
 	&& echo 'newrelic.enabled = true' >> /usr/local/etc/php/conf.d/newrelic.ini \
